@@ -10,13 +10,13 @@ EVENTS_FILE = 'events.json'
 
 # Default events
 DEFAULT_EVENTS = [
-    {"year": -2000, "title": "Hochkulturen in Mesopotamien", "category": "Politik & Geschichte", "region": "🇮🇶 Mesopotamien"},
-    {"year": -500,  "title": "Demokratie in Athen", "category": "Politik & Geschichte", "region": "🇬🇷 Griechenland"},
-    {"year": 1440,  "title": "Buchdruck (Gutenberg)", "category": "Technik & Wissenschaft", "region": "🇩🇪 Deutschland"},
-    {"year": 1789,  "title": "Französische Revolution", "category": "Politik & Geschichte", "region": "🇫🇷 Frankreich"},
-    {"year": 1815,  "title": "Industrielle Revolution", "category": "Wirtschaft", "region": "🇬🇧 England"},
-    {"year": 1969,  "title": "Mondlandung", "category": "Technik & Wissenschaft", "region": "🇺🇸 USA"},
-    {"year": 2020,  "title": "COVID-19 Pandemie", "category": "Gesellschaft & Soziales", "region": "🌍 Weltweit"},
+    {"year": -2000, "title": "Hochkulturen in Mesopotamien", "category": "🏛 Politik & Geschichte", "region": "🇮🇶 Mesopotamien"},
+    {"year": -500,  "title": "Demokratie in Athen", "category": "🏛 Politik & Geschichte", "region": "🇬🇷 Griechenland"},
+    {"year": 1440,  "title": "Buchdruck (Gutenberg)", "category": "⚙️ Technik & Erfindungen", "region": "🇩🇪 Deutschland"},
+    {"year": 1789,  "title": "Französische Revolution", "category": "🏛 Politik & Geschichte", "region": "🇫🇷 Frankreich"},
+    {"year": 1815,  "title": "Industrielle Revolution", "category": "💰 Wirtschaft & Handel", "region": "🇬🇧 England"},
+    {"year": 1969,  "title": "Mondlandung", "category": "🧠 Wissenschaft & Entdeckungen", "region": "🇺🇸 USA"},
+    {"year": 2020,  "title": "COVID-19 Pandemie", "category": "⚔️ Gesellschaft & Soziales", "region": "🌍 Weltweit"},
 ]
 
 def load_events():

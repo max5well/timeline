@@ -10,14 +10,119 @@ EVENTS_FILE = 'events.json'
 
 # Categories mapping for natural language
 CATEGORIES = {
-    'politik': 'Politik & Geschichte',
-    'geschichte': 'Politik & Geschichte',
-    'technik': 'Technik & Wissenschaft',
-    'wissenschaft': 'Technik & Wissenschaft',
-    'wirtschaft': 'Wirtschaft',
-    'gesellschaft': 'Gesellschaft & Soziales',
-    'soziales': 'Gesellschaft & Soziales',
-    'kultur': 'Gesellschaft & Soziales',
+    # 🏛 Politik & Geschichte
+    'politik': '🏛 Politik & Geschichte',
+    'geschichte': '🏛 Politik & Geschichte',
+    'krieg': '🏛 Politik & Geschichte',
+    'revolution': '🏛 Politik & Geschichte',
+    'herrscher': '🏛 Politik & Geschichte',
+    'vertrag': '🏛 Politik & Geschichte',
+    'staatenbildung': '🏛 Politik & Geschichte',
+    'political': '🏛 Politik & Geschichte',
+    'history': '🏛 Politik & Geschichte',
+
+    # 💰 Wirtschaft & Handel
+    'wirtschaft': '💰 Wirtschaft & Handel',
+    'handel': '💰 Wirtschaft & Handel',
+    'ökonomie': '💰 Wirtschaft & Handel',
+    'finanzen': '💰 Wirtschaft & Handel',
+    'industrialisierung': '💰 Wirtschaft & Handel',
+    'globalisierung': '💰 Wirtschaft & Handel',
+    'handelswege': '💰 Wirtschaft & Handel',
+    'wirtschaftskrise': '💰 Wirtschaft & Handel',
+    'economy': '💰 Wirtschaft & Handel',
+    'business': '💰 Wirtschaft & Handel',
+    'trade': '💰 Wirtschaft & Handel',
+
+    # 🧠 Wissenschaft & Entdeckungen
+    'wissenschaft': '🧠 Wissenschaft & Entdeckungen',
+    'entdeckung': '🧠 Wissenschaft & Entdeckungen',
+    'medizin': '🧠 Wissenschaft & Entdeckungen',
+    'astronomie': '🧠 Wissenschaft & Entdeckungen',
+    'mathematik': '🧠 Wissenschaft & Entdeckungen',
+    'naturwissenschaft': '🧠 Wissenschaft & Entdeckungen',
+    'forschung': '🧠 Wissenschaft & Entdeckungen',
+    'science': '🧠 Wissenschaft & Entdeckungen',
+    'discovery': '🧠 Wissenschaft & Entdeckungen',
+
+    # ⚙️ Technik & Erfindungen
+    'technik': '⚙️ Technik & Erfindungen',
+    'erfindung': '⚙️ Technik & Erfindungen',
+    'technologie': '⚙️ Technik & Erfindungen',
+    'maschine': '⚙️ Technik & Erfindungen',
+    'computer': '⚙️ Technik & Erfindungen',
+    'verkehrsmittel': '⚙️ Technik & Erfindungen',
+    'werkzeug': '⚙️ Technik & Erfindungen',
+    'technology': '⚙️ Technik & Erfindungen',
+    'tech': '⚙️ Technik & Erfindungen',
+    'invention': '⚙️ Technik & Erfindungen',
+
+    # 🏗 Architektur & Bauwerke
+    'architektur': '🏗 Architektur & Bauwerke',
+    'bauwerk': '🏗 Architektur & Bauwerke',
+    'bauwerke': '🏗 Architektur & Bauwerke',
+    'gebäude': '🏗 Architektur & Bauwerke',
+    'stadt': '🏗 Architektur & Bauwerke',
+    'städte': '🏗 Architektur & Bauwerke',
+    'bau': '🏗 Architektur & Bauwerke',
+    'architecture': '🏗 Architektur & Bauwerke',
+    'building': '🏗 Architektur & Bauwerke',
+
+    # 🎨 Kunst & Kultur
+    'kunst': '🎨 Kunst & Kultur',
+    'kultur': '🎨 Kunst & Kultur',
+    'malerei': '🎨 Kunst & Kultur',
+    'musik': '🎨 Kunst & Kultur',
+    'theater': '🎨 Kunst & Kultur',
+    'film': '🎨 Kunst & Kultur',
+    'mode': '🎨 Kunst & Kultur',
+    'art': '🎨 Kunst & Kultur',
+    'culture': '🎨 Kunst & Kultur',
+    'music': '🎨 Kunst & Kultur',
+
+    # 📚 Literatur & Philosophie
+    'literatur': '📚 Literatur & Philosophie',
+    'philosophie': '📚 Literatur & Philosophie',
+    'autor': '📚 Literatur & Philosophie',
+    'autoren': '📚 Literatur & Philosophie',
+    'werk': '📚 Literatur & Philosophie',
+    'werke': '📚 Literatur & Philosophie',
+    'ideen': '📚 Literatur & Philosophie',
+    'literature': '📚 Literatur & Philosophie',
+    'philosophy': '📚 Literatur & Philosophie',
+
+    # ✝️ Religion & Mythologie
+    'religion': '✝️ Religion & Mythologie',
+    'mythologie': '✝️ Religion & Mythologie',
+    'mythos': '✝️ Religion & Mythologie',
+    'reformation': '✝️ Religion & Mythologie',
+    'religiös': '✝️ Religion & Mythologie',
+    'glaube': '✝️ Religion & Mythologie',
+    'mythology': '✝️ Religion & Mythologie',
+
+    # ⚔️ Gesellschaft & Soziales
+    'gesellschaft': '⚔️ Gesellschaft & Soziales',
+    'soziales': '⚔️ Gesellschaft & Soziales',
+    'frauenrechte': '⚔️ Gesellschaft & Soziales',
+    'bildung': '⚔️ Gesellschaft & Soziales',
+    'sklaverei': '⚔️ Gesellschaft & Soziales',
+    'menschenrechte': '⚔️ Gesellschaft & Soziales',
+    'migration': '⚔️ Gesellschaft & Soziales',
+    'social': '⚔️ Gesellschaft & Soziales',
+    'society': '⚔️ Gesellschaft & Soziales',
+
+    # 🌍 Umwelt & Natur
+    'umwelt': '🌍 Umwelt & Natur',
+    'natur': '🌍 Umwelt & Natur',
+    'naturkatastrophe': '🌍 Umwelt & Natur',
+    'klima': '🌍 Umwelt & Natur',
+    'klimawandel': '🌍 Umwelt & Natur',
+    'ökologie': '🌍 Umwelt & Natur',
+    'ressourcen': '🌍 Umwelt & Natur',
+    'umweltschutz': '🌍 Umwelt & Natur',
+    'environment': '🌍 Umwelt & Natur',
+    'nature': '🌍 Umwelt & Natur',
+    'climate': '🌍 Umwelt & Natur',
 }
 
 # Common regions with flags
@@ -165,7 +270,7 @@ def whatsapp_webhook():
         return str(resp)
 
     # Check for help command
-    if incoming_msg.lower() in ['hilfe', 'help', '?']:
+    if incoming_msg.lower() in ['hilfe', 'help', '?', 'kategorien']:
         help_text = """📅 Timeline Event Hinzufügen
 
 Formate:
@@ -173,15 +278,21 @@ Formate:
 2. Jahr, Titel, Kategorie, Region
 
 Kategorien:
-- Politik & Geschichte
-- Technik & Wissenschaft
-- Wirtschaft
-- Gesellschaft & Soziales
+🏛 Politik & Geschichte
+💰 Wirtschaft & Handel
+🧠 Wissenschaft & Entdeckungen
+⚙️ Technik & Erfindungen
+🏗 Architektur & Bauwerke
+🎨 Kunst & Kultur
+📚 Literatur & Philosophie
+✝️ Religion & Mythologie
+⚔️ Gesellschaft & Soziales
+🌍 Umwelt & Natur
 
 Beispiele:
-✅ 1969 | Mondlandung | Technik | USA
+✅ 1969 | Mondlandung | Wissenschaft | USA
 ✅ 1789, Französische Revolution, Politik, Frankreich
-✅ 500 v. Chr. | Demokratie | Politik | Griechenland"""
+✅ 500 v. Chr. | Demokratie in Athen | Politik | Griechenland"""
 
         msg.body(help_text)
         return str(resp)
