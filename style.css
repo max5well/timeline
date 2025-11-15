@@ -1,0 +1,180 @@
+/* ======== General Layout ======== */
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #f3f4f6;
+  color: #222;
+  padding: 2rem;
+  margin: 0;
+}
+
+h1 {
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 1.8rem;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+select, input {
+  padding: 0.6rem 0.8rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  min-width: 180px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* ======== Timeline Container ======== */
+#timelineContainer {
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  border-top: 3px solid #444;
+  border-radius: 14px;
+  background: #fff;
+  height: auto;
+  max-height: 80vh;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+#timeline {
+  position: relative;
+  display: block;
+  height: auto;
+  min-width: 100%;
+  padding-bottom: 40px;
+}
+
+/* ======== Category Rows ======== */
+.category-row {
+  position: relative;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+/* Alternating row backgrounds for clarity */
+.category-row:nth-child(odd) {
+  background: #f9fafb;
+}
+.category-row:nth-child(even) {
+  background: #eef2ff;
+}
+
+/* ======== Sticky Category Labels ======== */
+.category-label {
+  position: sticky;
+  left: 0;
+  top: 10px;
+  background: inherit;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1.05em;
+  z-index: 10;
+  box-shadow: 3px 0 6px rgba(0,0,0,0.05);
+  min-width: 200px;
+}
+
+/* ======== Events ======== */
+.event {
+  position: absolute;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 220px;
+  white-space: normal;
+}
+
+.dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin: 0 auto 4px;
+  border: 2px solid #333;
+  background: var(--color);
+}
+
+.label {
+  background: #fff;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.9em;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  white-space: normal;
+  line-height: 1.3em;
+}
+
+/* ======== Category Colors ======== */
+.politik { --color: #2563eb; }        /* Blue */
+.wirtschaft { --color: #fbbf24; }     /* Gold */
+.technik { --color: #10b981; }        /* Green */
+.kultur { --color: #a855f7; }         /* Purple */
+.religion { --color: #f97316; }       /* Orange */
+.gesellschaft { --color: #06b6d4; }   /* Cyan */
+
+/* ======== Year Scale (Bottom) ======== */
+.year-scale {
+  position: relative;
+  border-top: 3px solid #000;
+  height: 50px;
+  margin-top: 10px;
+  background: linear-gradient(to bottom, #f9fafb, #e5e7eb);
+}
+
+.year-mark {
+  position: absolute;
+  top: 6px;
+  font-size: 0.85em;
+  transform: translateX(-50%);
+  color: #333;
+  font-weight: 500;
+}
+
+/* ======== Scrollbar Styling ======== */
+#timelineContainer::-webkit-scrollbar {
+  height: 10px;
+}
+
+#timelineContainer::-webkit-scrollbar-track {
+  background: #e5e7eb;
+  border-radius: 8px;
+}
+
+#timelineContainer::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+  border-radius: 8px;
+}
+
+#timelineContainer::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* ======== Responsive ======== */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.4rem;
+  }
+
+  .category-row {
+    height: 120px;
+  }
+
+  .event {
+    width: 180px;
+  }
+
+  .label {
+    font-size: 0.8em;
+  }
+}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Historischer Zeitstrahl</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>🌍 Interaktiver Historischer Zeitstrahl</h1>
+
+  <div class="controls">
+    <select id="categoryFilter">
+      <option value="">Kategorie: Alle</option>
+    </select>
+
+    <select id="regionFilter">
+      <option value="">Region: Alle</option>
+    </select>
+
+    <input type="text" id="searchInput" placeholder="🔍 Suche nach Ereignis..." />
+  </div>
+
+  <div id="timelineContainer">
+    <div id="timeline"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
