@@ -237,14 +237,23 @@ async function showEventSummary(event) {
   `;
   popup.style.display = 'flex';
 
-  // Check cache
+  // Check if event already has summary (from events.json)
+  if (event.summary && Array.isArray(event.summary) && event.summary.length > 0) {
+    console.log('Using cached summary from event data');
+    displaySummary(popup, event.summary);
+    return;
+  }
+
+  // Check memory cache
   const cacheKey = `${event.title}_${event.year}`;
   if (summaryCache[cacheKey]) {
+    console.log('Using cached summary from memory');
     displaySummary(popup, summaryCache[cacheKey]);
     return;
   }
 
   // Fetch summary from API
+  console.log('Fetching NEW summary from API');
   try {
     const res = await fetch('/events/summary', {
       method: 'POST',
@@ -256,6 +265,12 @@ async function showEventSummary(event) {
     if (data.summary) {
       summaryCache[cacheKey] = data.summary;
       displaySummary(popup, data.summary);
+
+      // Reload events to get updated cache
+      if (!data.cached) {
+        console.log('Summary was generated, reloading events to update cache');
+        setTimeout(() => loadEvents(), 1000);
+      }
     } else {
       displaySummary(popup, ['Keine Zusammenfassung verfügbar']);
     }
