@@ -14,6 +14,7 @@ DEFAULT_EVENTS = [
     {"year": -2000, "title": "Hochkulturen in Mesopotamien", "category": "🏛 Politik & Geschichte", "region": "🇮🇶 Mesopotamien"},
     {"year": -500,  "title": "Demokratie in Athen", "category": "🏛 Politik & Geschichte", "region": "🇬🇷 Griechenland"},
     {"year": 1440,  "title": "Buchdruck (Gutenberg)", "category": "⚙️ Technik & Erfindungen", "region": "🇩🇪 Deutschland"},
+    {"year": 1769,  "title": "Alexander von Humboldt", "category": "👤 Persönlichkeiten", "region": "🇩🇪 Deutschland"},
     {"year": 1789,  "title": "Französische Revolution", "category": "🏛 Politik & Geschichte", "region": "🇫🇷 Frankreich"},
     {"year": 1815,  "title": "Industrielle Revolution", "category": "💰 Wirtschaft & Handel", "region": "🇬🇧 England"},
     {"year": 1969,  "title": "Mondlandung", "category": "🧠 Wissenschaft & Entdeckungen", "region": "🇺🇸 USA"},
@@ -273,8 +274,43 @@ def api_info():
         "endpoints": [
             "/events (GET, POST)",
             "/events/telegram (POST) - for n8n/Telegram integration",
-            "/events/summary (POST) - Generate AI summary for event"
+            "/events/summary (POST) - Generate AI summary for event",
+            "/test/add-event (POST) - Test adding event",
+            "/test/api-key - Check if API key is loaded"
         ]
+    })
+
+@app.route('/test/api-key', methods=['GET'])
+def test_api_key():
+    """Debug endpoint to check if API key is loaded"""
+    api_key = os.environ.get('ANTHROPIC_API_KEY')
+    return jsonify({
+        "api_key_loaded": bool(api_key),
+        "api_key_length": len(api_key) if api_key else 0,
+        "api_key_preview": api_key[:20] + "..." if api_key else "NOT SET",
+        "environment": {
+            "all_env_vars": list(os.environ.keys())
+        }
+    })
+
+@app.route('/test/add-event', methods=['POST'])
+def test_add_event():
+    """Test endpoint to add a simple event"""
+    test_event = {
+        "year": 1945,
+        "title": "Ende 2. Weltkrieg",
+        "category": "🏛 Politik & Geschichte",
+        "region": "🌍 Weltweit"
+    }
+
+    events.append(test_event)
+    save_events(events)
+
+    return jsonify({
+        "success": True,
+        "message": "Test event added",
+        "event": test_event,
+        "total_events": len(events)
     })
 
 @app.route('/style.css')
