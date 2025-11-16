@@ -313,6 +313,62 @@ def test_add_event():
         "total_events": len(events)
     })
 
+@app.route('/test/summary', methods=['GET'])
+def test_summary():
+    """Test summary generation with detailed error logging"""
+    test_event = {
+        "year": 1789,
+        "title": "Französische Revolution",
+        "category": "🏛 Politik & Geschichte",
+        "region": "🇫🇷 Frankreich"
+    }
+
+    api_key = os.environ.get('ANTHROPIC_API_KEY')
+
+    if not api_key:
+        return jsonify({
+            "error": "No API key found",
+            "api_key_loaded": False
+        }), 500
+
+    try:
+        import anthropic
+        client = anthropic.Anthropic(api_key=api_key)
+
+        prompt = """Erstelle 3 Bullet Points für: Französische Revolution
+
+Antworte nur mit den Punkten (ohne Bindestriche):"""
+
+        message = client.messages.create(
+            model="claude-3-5-haiku-20241022",
+            max_tokens=300,
+            messages=[{"role": "user", "content": prompt}]
+        )
+
+        response_text = message.content[0].text
+
+        return jsonify({
+            "success": True,
+            "api_key_loaded": True,
+            "api_key_preview": api_key[:20] + "...",
+            "model": "claude-3-5-haiku-20241022",
+            "raw_response": response_text,
+            "usage": {
+                "input_tokens": message.usage.input_tokens,
+                "output_tokens": message.usage.output_tokens
+            }
+        })
+
+    except Exception as e:
+        import traceback
+        return jsonify({
+            "error": str(e),
+            "error_type": type(e).__name__,
+            "traceback": traceback.format_exc(),
+            "api_key_loaded": bool(api_key),
+            "api_key_preview": api_key[:20] + "..." if api_key else None
+        }), 500
+
 @app.route('/style.css')
 def serve_css():
     return send_from_directory('.', 'style.css')
