@@ -5,7 +5,7 @@ let events = [];
 // ==============================
 async function loadEvents() {
   try {
-    const res = await fetch('http://127.0.0.1:5001/events');
+    const res = await fetch('https://web-production-a045f.up.railway.app/events');
     events = await res.json();
     fillFilters(events);
     renderTimeline(events);
