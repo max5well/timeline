@@ -132,19 +132,35 @@ function renderTimeline(data) {
   });
 
   // add bottom scale
+  console.log('Creating year scale...');
   const scale = document.createElement('div');
   scale.className = 'year-scale';
-  const step = niceStep((maxYear - minYear) / 10);
+  const step = niceStep(yearRange / 10);
+  console.log('Year scale step:', step);
 
-  for (let y = minYear; y <= maxYear; y += step) {
-    const mark = document.createElement('div');
-    mark.className = 'year-mark';
-    mark.style.left = (y - minYear) * widthPerYear + 200 + 'px';
-    mark.textContent = formatYear(y);
-    scale.appendChild(mark);
+  if (step > 0 && isFinite(step)) {
+    let marksAdded = 0;
+    for (let y = minYear; y <= maxYear; y += step) {
+      const mark = document.createElement('div');
+      mark.className = 'year-mark';
+      mark.style.left = (y - minYear) * widthPerYear + 200 + 'px';
+      mark.textContent = formatYear(y);
+      scale.appendChild(mark);
+      marksAdded++;
+
+      // Safety: prevent infinite loop
+      if (marksAdded > 1000) {
+        console.error('Too many year marks, breaking loop');
+        break;
+      }
+    }
+    console.log('Added', marksAdded, 'year marks');
+  } else {
+    console.error('Invalid step size:', step);
   }
 
   timeline.appendChild(scale);
+  console.log('Year scale appended');
 
   // refresh scroll width and height to ensure scroll works
   console.log('Finalizing timeline...');
@@ -155,12 +171,24 @@ function renderTimeline(data) {
 
 // helper to make clean intervals
 function niceStep(rawStep) {
-  const pow10 = Math.pow(10, Math.floor(Math.log10(rawStep)));
-  const n = rawStep / pow10;
-  if (n < 1.5) return 1 * pow10;
-  if (n < 3) return 2 * pow10;
-  if (n < 7) return 5 * pow10;
-  return 10 * pow10;
+  try {
+    // Handle edge cases
+    if (!rawStep || rawStep <= 0 || !isFinite(rawStep)) {
+      console.warn('Invalid rawStep:', rawStep, 'using 100 as default');
+      return 100;
+    }
+
+    const pow10 = Math.pow(10, Math.floor(Math.log10(rawStep)));
+    const n = rawStep / pow10;
+
+    if (n < 1.5) return 1 * pow10;
+    if (n < 3) return 2 * pow10;
+    if (n < 7) return 5 * pow10;
+    return 10 * pow10;
+  } catch (e) {
+    console.error('Error in niceStep:', e);
+    return 100;
+  }
 }
 
 // format years
