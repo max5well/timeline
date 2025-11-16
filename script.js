@@ -1,4 +1,5 @@
 let events = [];
+let summaryCache = {}; // Cache für LLM summaries
 
 // ==============================
 // 🚀 Load events from API
@@ -60,12 +61,13 @@ function renderTimeline(data) {
 
   // scale dynamically depending on range
   let widthPerYear = 2;
-  let totalWidth = (maxYear - minYear) * widthPerYear + 400;
+  const yearRange = maxYear - minYear || 100; // Prevent division by zero
+  let totalWidth = yearRange * widthPerYear + 400;
 
-  if (totalWidth < 1200) widthPerYear = 1200 / (maxYear - minYear);
-  if (totalWidth > 6000) widthPerYear = 6000 / (maxYear - minYear);
+  if (totalWidth < 1200) widthPerYear = 1200 / yearRange;
+  if (totalWidth > 6000) widthPerYear = 6000 / yearRange;
 
-  totalWidth = (maxYear - minYear) * widthPerYear + 400;
+  totalWidth = yearRange * widthPerYear + 400;
   timeline.style.width = totalWidth + 'px';
 
   const categories = [...new Set(data.map(e => e.category))];
@@ -90,7 +92,20 @@ function renderTimeline(data) {
           ${ev.region} ${formatYear(ev.year)}<br>
           <strong>${ev.title}</strong>
         </div>
+        <div class="info-icon" data-event='${JSON.stringify(ev).replace(/'/g, "&apos;")}'>ℹ️</div>
       `;
+
+      // Add click handler for info icon
+      setTimeout(() => {
+        const infoIcon = div.querySelector('.info-icon');
+        if (infoIcon) {
+          infoIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showEventSummary(ev);
+          });
+        }
+      }, 0);
+
       row.appendChild(div);
     });
 
@@ -138,6 +153,67 @@ function className(cat) {
             .trim()
             .toLowerCase()
             .replace(/[^a-z]/g, '');
+}
+
+// ==============================
+// 💬 Event Summary Popup
+// ==============================
+async function showEventSummary(event) {
+  // Create or get popup
+  let popup = document.getElementById('summary-popup');
+  if (!popup) {
+    popup = document.createElement('div');
+    popup.id = 'summary-popup';
+    popup.className = 'summary-popup';
+    document.body.appendChild(popup);
+  }
+
+  // Show loading
+  popup.innerHTML = `
+    <div class="popup-content">
+      <button class="close-btn" onclick="document.getElementById('summary-popup').style.display='none'">✕</button>
+      <h3>${event.title}</h3>
+      <p class="event-meta">${event.region} • ${formatYear(event.year)}</p>
+      <div class="summary-content">
+        <p>⏳ Lade Zusammenfassung...</p>
+      </div>
+    </div>
+  `;
+  popup.style.display = 'flex';
+
+  // Check cache
+  const cacheKey = `${event.title}_${event.year}`;
+  if (summaryCache[cacheKey]) {
+    displaySummary(popup, summaryCache[cacheKey]);
+    return;
+  }
+
+  // Fetch summary from API
+  try {
+    const res = await fetch('/events/summary', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(event)
+    });
+    const data = await res.json();
+
+    if (data.summary) {
+      summaryCache[cacheKey] = data.summary;
+      displaySummary(popup, data.summary);
+    } else {
+      displaySummary(popup, ['Keine Zusammenfassung verfügbar']);
+    }
+  } catch (err) {
+    console.error('Error loading summary:', err);
+    displaySummary(popup, ['❌ Fehler beim Laden der Zusammenfassung']);
+  }
+}
+
+function displaySummary(popup, bulletPoints) {
+  const summaryDiv = popup.querySelector('.summary-content');
+  summaryDiv.innerHTML = '<ul class="summary-list">' +
+    bulletPoints.map(point => `<li>${point}</li>`).join('') +
+    '</ul>';
 }
 
 // ==============================
