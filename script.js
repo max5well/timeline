@@ -46,18 +46,29 @@ function fillFilters(events) {
 // 🕰️ Render timeline dynamically
 // ==============================
 function renderTimeline(data) {
+  console.log('renderTimeline START with', data.length, 'events');
+
   const container = document.getElementById('timelineContainer');
   const timeline = document.getElementById('timeline');
 
-  timeline.innerHTML = '';
-
-  if (data.length === 0) {
-    timeline.innerHTML = "<p style='padding:20px'>Keine Ereignisse gefunden.</p>";
+  if (!timeline) {
+    console.error('Timeline element not found!');
     return;
   }
 
+  timeline.innerHTML = '';
+  console.log('Timeline cleared');
+
+  if (data.length === 0) {
+    timeline.innerHTML = "<p style='padding:20px'>Keine Ereignisse gefunden.</p>";
+    console.log('No events to display');
+    return;
+  }
+
+  console.log('Calculating year range...');
   const minYear = Math.min(...data.map(e => e.year));
   const maxYear = Math.max(...data.map(e => e.year));
+  console.log('Year range:', minYear, 'to', maxYear);
 
   // scale dynamically depending on range
   let widthPerYear = 2;
@@ -70,18 +81,28 @@ function renderTimeline(data) {
   totalWidth = yearRange * widthPerYear + 400;
   timeline.style.width = totalWidth + 'px';
 
+  console.log('Extracting categories...');
   const categories = [...new Set(data.map(e => e.category))];
+  console.log('Found categories:', categories);
 
-  categories.forEach(cat => {
+  categories.forEach((cat, catIndex) => {
+    console.log(`Processing category ${catIndex + 1}/${categories.length}:`, cat);
+
     const row = document.createElement('div');
-    row.className = `category-row ${className(cat)}`;
+    const catClass = className(cat);
+    console.log('Category class name:', catClass);
+    row.className = `category-row ${catClass}`;
 
     const label = document.createElement('div');
     label.className = 'category-label';
     label.textContent = cat;
     row.appendChild(label);
 
-    data.filter(e => e.category === cat).forEach(ev => {
+    const eventsInCat = data.filter(e => e.category === cat);
+    console.log(`Events in category "${cat}":`, eventsInCat.length);
+
+    eventsInCat.forEach((ev, evIndex) => {
+      console.log(`  Event ${evIndex + 1}/${eventsInCat.length}:`, ev.title);
       const x = (ev.year - minYear) * widthPerYear + 200;
       const div = document.createElement('div');
       div.className = `event ${className(cat)}`;
@@ -128,8 +149,10 @@ function renderTimeline(data) {
   timeline.appendChild(scale);
 
   // refresh scroll width and height to ensure scroll works
+  console.log('Finalizing timeline...');
   container.scrollLeft = 0;
   container.style.minHeight = `${categories.length * 160 + 100}px`;
+  console.log('renderTimeline COMPLETED successfully');
 }
 
 // helper to make clean intervals
