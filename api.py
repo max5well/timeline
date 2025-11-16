@@ -192,29 +192,45 @@ def generate_summary():
     # Check for API key
     api_key = os.environ.get('ANTHROPIC_API_KEY')
     if not api_key:
+        print("WARNING: No ANTHROPIC_API_KEY found, using fallback summary")
         # Return fallback summary if no API key
         return jsonify({
-            "summary": generate_fallback_summary(event)
+            "summary": generate_fallback_summary(event),
+            "fallback": True
         })
+
+    print(f"Generating summary for: {event.get('title', 'Unknown')}")
 
     try:
         client = anthropic.Anthropic(api_key=api_key)
 
-        prompt = f"""Erstelle eine prägnante Zusammenfassung für: {event['title']}
+        # Build context-aware prompt
+        event_context = f"Ereignis: {event['title']}"
+        if event.get('year'):
+            year_str = f"{abs(event['year'])} {'v. Chr.' if event['year'] < 0 else 'n. Chr.'}"
+            event_context += f" ({year_str})"
+        if event.get('region'):
+            event_context += f", Region: {event['region']}"
+
+        prompt = f"""Erstelle eine prägnante Zusammenfassung für dieses historische Ereignis:
+
+{event_context}
 
 Anforderungen:
 - Genau 3-5 kurze Bullet Points
-- Jeder Punkt max. 1 Satz, sehr präzise
-- KEINE Metadata (kein Jahr, keine Region, keine Kategorie nennen)
-- Nur wichtigste Fakten: Ursachen, Verlauf, Auswirkungen, Bedeutung
+- Jeder Punkt max. 1 Satz, sehr präzise und spezifisch für DIESES Ereignis
+- KEINE Metadata (kein Jahr, keine Region nennen - das steht schon oben)
+- Fokus: Ursachen, wichtige Fakten, Verlauf, Auswirkungen, Bedeutung
+- Sei SPEZIFISCH - nicht generisch!
 
-Beispiel für "2. Weltkrieg":
-- Begann durch Überfall Deutschlands auf Polen
-- Endete mit Kapitulation Deutschlands und Japans
-- Über 60 Millionen Tote weltweit
-- Führte zur Gründung der Vereinten Nationen
+Beispiel für "Französische Revolution (1789)":
+Begann durch wirtschaftliche Krise und Unzufriedenheit mit dem Königshaus
+Sturm auf die Bastille am 14. Juli 1789 als Wendepunkt
+König Ludwig XVI wurde 1793 hingerichtet
+Führte zur Erklärung der Menschenrechte
+Endete mit Napoleons Machtübernahme
 
-Antworte NUR mit den Bullet Points (ohne - Zeichen):"""
+Antworte NUR mit den Bullet Points (OHNE Bindestriche oder Nummerierung):"""
 
         message = client.messages.create(
             model="claude-3-5-haiku-20241022",  # Cheaper model
@@ -243,10 +259,11 @@ Antworte NUR mit den Bullet Points (ohne - Zeichen):"""
 
 def generate_fallback_summary(event):
     """Generate a simple fallback summary without AI"""
+    title = event.get('title', 'Ereignis')
     return [
-        "Wichtiges historisches Ereignis",
-        "Hatte bedeutende Auswirkungen auf die Geschichte",
-        "Details können über historische Quellen recherchiert werden"
+        f"Keine automatische Zusammenfassung für '{title}' verfügbar",
+        "Bitte ANTHROPIC_API_KEY in Railway Environment Variables setzen",
+        "Dann werden AI-generierte Zusammenfassungen angezeigt"
     ]
 
 @app.route('/api')

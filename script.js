@@ -226,31 +226,42 @@ function displaySummary(popup, bulletPoints) {
 // ==============================
 // 🔍 Filter + search
 // ==============================
+let filterTimeout;
 function applyFilters() {
-  try {
-    const catEl = document.getElementById('categoryFilter');
-    const regEl = document.getElementById('regionFilter');
-    const searchEl = document.getElementById('searchInput');
+  // Debounce to prevent multiple rapid calls
+  clearTimeout(filterTimeout);
+  filterTimeout = setTimeout(() => {
+    try {
+      console.log('applyFilters called');
+      const catEl = document.getElementById('categoryFilter');
+      const regEl = document.getElementById('regionFilter');
+      const searchEl = document.getElementById('searchInput');
 
-    if (!catEl || !regEl || !searchEl) {
-      console.error('Filter elements not found');
-      return;
+      if (!catEl || !regEl || !searchEl) {
+        console.error('Filter elements not found');
+        return;
+      }
+
+      const cat = catEl.value;
+      const reg = regEl.value;
+      const search = searchEl.value.toLowerCase();
+
+      console.log('Filters:', { cat, reg, search });
+
+      const filtered = events.filter(e =>
+        (!cat || e.category === cat) &&
+        (!reg || e.region === reg) &&
+        (!search || e.title.toLowerCase().includes(search))
+      );
+
+      console.log(`Filtered ${filtered.length} events`);
+      renderTimeline(filtered);
+      console.log('renderTimeline completed');
+    } catch (err) {
+      console.error('Error in applyFilters:', err);
+      alert('Filter error: ' + err.message);
     }
-
-    const cat = catEl.value;
-    const reg = regEl.value;
-    const search = searchEl.value.toLowerCase();
-
-    const filtered = events.filter(e =>
-      (!cat || e.category === cat) &&
-      (!reg || e.region === reg) &&
-      (!search || e.title.toLowerCase().includes(search))
-    );
-
-    renderTimeline(filtered);
-  } catch (err) {
-    console.error('Error in applyFilters:', err);
-  }
+  }, 100); // 100ms debounce
 }
 
 // init
