@@ -133,30 +133,53 @@ function formatYear(y) {
 }
 
 function className(cat) {
-  return cat.toLowerCase().replace(/[^a-z]/g, '');
+  // Remove emojis and special characters, keep only letters
+  return cat.replace(/[\u{1F000}-\u{1FFFF}]/gu, '')
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z]/g, '');
 }
 
 // ==============================
 // 🔍 Filter + search
 // ==============================
 function applyFilters() {
-  const cat = document.getElementById('categoryFilter').value;
-  const reg = document.getElementById('regionFilter').value;
-  const search = document.getElementById('searchInput').value.toLowerCase();
+  try {
+    const catEl = document.getElementById('categoryFilter');
+    const regEl = document.getElementById('regionFilter');
+    const searchEl = document.getElementById('searchInput');
 
-  const filtered = events.filter(e =>
-    (!cat || e.category === cat) &&
-    (!reg || e.region === reg) &&
-    (!search || e.title.toLowerCase().includes(search))
-  );
+    if (!catEl || !regEl || !searchEl) {
+      console.error('Filter elements not found');
+      return;
+    }
 
-  renderTimeline(filtered);
+    const cat = catEl.value;
+    const reg = regEl.value;
+    const search = searchEl.value.toLowerCase();
+
+    const filtered = events.filter(e =>
+      (!cat || e.category === cat) &&
+      (!reg || e.region === reg) &&
+      (!search || e.title.toLowerCase().includes(search))
+    );
+
+    renderTimeline(filtered);
+  } catch (err) {
+    console.error('Error in applyFilters:', err);
+  }
 }
 
-// event listeners
-document.getElementById('categoryFilter').addEventListener('change', applyFilters);
-document.getElementById('regionFilter').addEventListener('change', applyFilters);
-document.getElementById('searchInput').addEventListener('input', applyFilters);
-
 // init
-loadEvents();
+document.addEventListener('DOMContentLoaded', () => {
+  loadEvents();
+
+  // event listeners
+  const catFilter = document.getElementById('categoryFilter');
+  const regFilter = document.getElementById('regionFilter');
+  const searchInput = document.getElementById('searchInput');
+
+  if (catFilter) catFilter.addEventListener('change', applyFilters);
+  if (regFilter) regFilter.addEventListener('change', applyFilters);
+  if (searchInput) searchInput.addEventListener('input', applyFilters);
+});
