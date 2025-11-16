@@ -83,10 +83,6 @@ def add_event_telegram():
         "event": event
     }), 201
 
-@app.route('/')
-def home():
-    return app.send_static_file('index.html')
-
 @app.route('/api')
 def api_info():
     return jsonify({
@@ -96,6 +92,18 @@ def api_info():
             "/events/telegram (POST) - for n8n/Telegram integration"
         ]
     })
+
+@app.route('/style.css')
+def serve_css():
+    return send_from_directory('.', 'style.css')
+
+@app.route('/script.js')
+def serve_js():
+    return send_from_directory('.', 'script.js')
+
+@app.route('/')
+def home():
+    return send_from_directory('.', 'index.html')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
