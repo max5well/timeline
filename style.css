@@ -116,12 +116,30 @@ select, input {
 }
 
 /* ======== Category Colors ======== */
-.politik { --color: #2563eb; }        /* Blue */
-.wirtschaft { --color: #fbbf24; }     /* Gold */
-.technik { --color: #10b981; }        /* Green */
-.kultur { --color: #a855f7; }         /* Purple */
-.religion { --color: #f97316; }       /* Orange */
-.gesellschaft { --color: #06b6d4; }   /* Cyan */
+.politikgeschichte { --color: #2563eb; }        /* Blue - Politik & Geschichte */
+.wirtschafthandel { --color: #fbbf24; }         /* Gold - Wirtschaft & Handel */
+.wissenschaftentdeckungen { --color: #10b981; } /* Green - Wissenschaft & Entdeckungen */
+.technikerfindungen { --color: #34d399; }       /* Light Green - Technik & Erfindungen */
+.architektur bauwerke { --color: #8b5cf6; }     /* Purple - Architektur & Bauwerke */
+.kunstkultur { --color: #ec4899; }              /* Pink - Kunst & Kultur */
+.literaturphilosophie { --color: #6366f1; }     /* Indigo - Literatur & Philosophie */
+.religionmythologie { --color: #f97316; }       /* Orange - Religion & Mythologie */
+.gesellschaftsoziales { --color: #06b6d4; }     /* Cyan - Gesellschaft & Soziales */
+.umweltnatur { --color: #22c55e; }              /* Lime - Umwelt & Natur */
+.persoenlichkeiten { --color: #f59e0b; }        /* Amber - Persönlichkeiten */
+
+/* Fallback colors */
+.politik { --color: #2563eb; }
+.wirtschaft { --color: #fbbf24; }
+.wissenschaft { --color: #10b981; }
+.technik { --color: #34d399; }
+.architektur { --color: #8b5cf6; }
+.kunst { --color: #ec4899; }
+.literatur { --color: #6366f1; }
+.religion { --color: #f97316; }
+.gesellschaft { --color: #06b6d4; }
+.umwelt { --color: #22c55e; }
+.default { --color: #6b7280; }
 
 /* ======== Year Scale (Bottom) ======== */
 .year-scale {

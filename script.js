@@ -149,10 +149,17 @@ function formatYear(y) {
 
 function className(cat) {
   // Remove emojis and special characters, keep only letters
-  return cat.replace(/[\u{1F000}-\u{1FFFF}]/gu, '')
-            .trim()
-            .toLowerCase()
-            .replace(/[^a-z]/g, '');
+  try {
+    return cat.replace(/[\u{1F000}-\u{1FFFF}]/gu, '')
+              .replace(/[\u{2600}-\u{26FF}]/gu, '')  // Remove misc symbols
+              .replace(/[\u{2700}-\u{27BF}]/gu, '')  // Remove dingbats
+              .trim()
+              .toLowerCase()
+              .replace(/[^a-z]/g, '') || 'default';
+  } catch (e) {
+    console.error('className error:', e, cat);
+    return 'default';
+  }
 }
 
 // ==============================

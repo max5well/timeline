@@ -71,26 +71,42 @@ Verfügbare Kategorien (mit Emoji):
 - ✝️ Religion & Mythologie
 - ⚔️ Gesellschaft & Soziales
 - 🌍 Umwelt & Natur
+- 👤 Persönlichkeiten (für historische Personen - nutze Geburtsjahr als "year")
 
 Aufgabe:
-1. Extrahiere: Jahr, Titel, wähle passende Kategorie, Region
+1. Extrahiere: Jahr (bei Personen: Geburtsjahr), Titel, wähle passende Kategorie, Region
 2. Füge Flaggen-Emoji zur Region hinzu (🇩🇪 Deutschland, 🇫🇷 Frankreich, etc.)
-3. Erstelle 5 prägnante Bullet Points zur Zusammenfassung
+3. Erstelle 3-5 kurze, prägnante Bullet Points OHNE Metadata (kein Jahr, keine Region nennen)
 
-Antworte NUR mit diesem JSON (keine Erklärung):
+Beispiel für Person:
 {{
-  "year": -500,
-  "title": "Event Titel",
-  "category": "🏛 Politik & Geschichte",
-  "region": "🇬🇷 Griechenland",
+  "year": 1769,
+  "title": "Alexander von Humboldt",
+  "category": "👤 Persönlichkeiten",
+  "region": "🇩🇪 Deutschland",
   "summary": [
-    "Bullet Point 1",
-    "Bullet Point 2",
-    "Bullet Point 3",
-    "Bullet Point 4",
-    "Bullet Point 5"
+    "Naturforscher und bedeutendster Wissenschaftler seiner Zeit",
+    "Erforschte Südamerika und dokumentierte Flora, Fauna und Geologie",
+    "Begründer der modernen Geographie und Ökologie",
+    "Sein Werk beeinflusste Darwin und die Evolutionstheorie"
   ]
-}}"""
+}}
+
+Beispiel für Ereignis:
+{{
+  "year": 1945,
+  "title": "Ende 2. Weltkrieg",
+  "category": "🏛 Politik & Geschichte",
+  "region": "🌍 Weltweit",
+  "summary": [
+    "Begann durch Überfall Deutschlands auf Polen",
+    "Endete mit Kapitulation Deutschlands und Japans",
+    "Über 60 Millionen Tote weltweit",
+    "Führte zur Gründung der Vereinten Nationen"
+  ]
+}}
+
+Antworte NUR mit dem JSON (keine Erklärung):"""
 
         message_response = client.messages.create(
             model="claude-3-5-haiku-20241022",
@@ -184,26 +200,21 @@ def generate_summary():
     try:
         client = anthropic.Anthropic(api_key=api_key)
 
-        prompt = f"""Erstelle eine prägnante Zusammenfassung des folgenden historischen Ereignisses in genau 5 Bullet Points auf Deutsch:
-
-Ereignis: {event['title']}
-Jahr: {event['year']}
-Kategorie: {event.get('category', 'Unbekannt')}
-Region: {event.get('region', 'Unbekannt')}
+        prompt = f"""Erstelle eine prägnante Zusammenfassung für: {event['title']}
 
 Anforderungen:
-- Genau 5 Bullet Points
-- Jeder Punkt max. 1-2 Sätze
-- Fokus auf: Ursachen, wichtige Fakten, Auswirkungen, historische Bedeutung
-- Präzise und informativ
-- Nur die Bullet Points, keine Einleitung
+- Genau 3-5 kurze Bullet Points
+- Jeder Punkt max. 1 Satz, sehr präzise
+- KEINE Metadata (kein Jahr, keine Region, keine Kategorie nennen)
+- Nur wichtigste Fakten: Ursachen, Verlauf, Auswirkungen, Bedeutung
 
-Format:
-- Punkt 1
-- Punkt 2
-- Punkt 3
-- Punkt 4
-- Punkt 5"""
+Beispiel für "2. Weltkrieg":
+- Begann durch Überfall Deutschlands auf Polen
+- Endete mit Kapitulation Deutschlands und Japans
+- Über 60 Millionen Tote weltweit
+- Führte zur Gründung der Vereinten Nationen
+
+Antworte NUR mit den Bullet Points (ohne - Zeichen):"""
 
         message = client.messages.create(
             model="claude-3-5-haiku-20241022",  # Cheaper model
@@ -233,11 +244,9 @@ Format:
 def generate_fallback_summary(event):
     """Generate a simple fallback summary without AI"""
     return [
-        f"Ereignis fand im Jahr {abs(event['year'])} {'v. Chr.' if event['year'] < 0 else 'n. Chr.'} statt",
-        f"Gehört zur Kategorie: {event.get('category', 'Unbekannt')}",
-        f"Region: {event.get('region', 'Unbekannt')}",
-        f"Titel: {event['title']}",
-        "Weitere Details können über historische Quellen recherchiert werden"
+        "Wichtiges historisches Ereignis",
+        "Hatte bedeutende Auswirkungen auf die Geschichte",
+        "Details können über historische Quellen recherchiert werden"
     ]
 
 @app.route('/api')

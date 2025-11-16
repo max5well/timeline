@@ -123,6 +123,18 @@ CATEGORIES = {
     'environment': '🌍 Umwelt & Natur',
     'nature': '🌍 Umwelt & Natur',
     'climate': '🌍 Umwelt & Natur',
+
+    # 👤 Persönlichkeiten
+    'persönlichkeit': '👤 Persönlichkeiten',
+    'persönlichkeiten': '👤 Persönlichkeiten',
+    'person': '👤 Persönlichkeiten',
+    'personen': '👤 Persönlichkeiten',
+    'biografie': '👤 Persönlichkeiten',
+    'biographie': '👤 Persönlichkeiten',
+    'geboren': '👤 Persönlichkeiten',
+    'geburt': '👤 Persönlichkeiten',
+    'people': '👤 Persönlichkeiten',
+    'biography': '👤 Persönlichkeiten',
 }
 
 # Common regions with flags
