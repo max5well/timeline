@@ -184,23 +184,31 @@ def add_event_telegram():
 def generate_summary():
     """
     Generate AI summary for an event using Claude API
+    Caches the summary in the event for future requests
     """
     event = request.get_json()
 
     if not event or 'title' not in event:
         return jsonify({"error": "Invalid event data"}), 400
 
+    # Check if summary is already cached in the event
+    if 'summary' in event and event['summary']:
+        print(f"Using cached summary for: {event.get('title', 'Unknown')}")
+        return jsonify({
+            "summary": event['summary'],
+            "cached": True
+        })
+
     # Check for API key
     api_key = os.environ.get('ANTHROPIC_API_KEY')
     if not api_key:
         print("WARNING: No ANTHROPIC_API_KEY found, using fallback summary")
-        # Return fallback summary if no API key
         return jsonify({
             "summary": generate_fallback_summary(event),
             "fallback": True
         })
 
-    print(f"Generating summary for: {event.get('title', 'Unknown')}")
+    print(f"Generating NEW summary for: {event.get('title', 'Unknown')}")
 
     try:
         client = anthropic.Anthropic(api_key=api_key)
@@ -250,7 +258,22 @@ Antworte NUR mit den Bullet Points (OHNE Bindestriche oder Nummerierung):"""
         while len(bullet_points) < 5:
             bullet_points.append("Weitere Informationen werden noch recherchiert")
 
-        return jsonify({"summary": bullet_points})
+        # Save summary to event in events.json
+        event_title = event.get('title')
+        event_year = event.get('year')
+
+        # Find and update the event in the events list
+        for e in events:
+            if e.get('title') == event_title and e.get('year') == event_year:
+                e['summary'] = bullet_points
+                save_events(events)
+                print(f"Saved summary to event: {event_title}")
+                break
+
+        return jsonify({
+            "summary": bullet_points,
+            "cached": False
+        })
 
     except Exception as e:
         print(f"Error generating summary: {e}")

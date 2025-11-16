@@ -105,7 +105,7 @@ function renderTimeline(data) {
       console.log(`  Event ${evIndex + 1}/${eventsInCat.length}:`, ev.title);
       const x = (ev.year - minYear) * widthPerYear + 200;
       const div = document.createElement('div');
-      div.className = `event ${className(cat)}`;
+      div.className = `event ${catClass}`;
       div.style.left = `${x}px`;
       div.innerHTML = `
         <div class="dot"></div>
@@ -113,19 +113,17 @@ function renderTimeline(data) {
           ${ev.region} ${formatYear(ev.year)}<br>
           <strong>${ev.title}</strong>
         </div>
-        <div class="info-icon" data-event='${JSON.stringify(ev).replace(/'/g, "&apos;")}'>ℹ️</div>
+        <div class="info-icon">ℹ️</div>
       `;
 
-      // Add click handler for info icon
-      setTimeout(() => {
-        const infoIcon = div.querySelector('.info-icon');
-        if (infoIcon) {
-          infoIcon.addEventListener('click', (e) => {
-            e.stopPropagation();
-            showEventSummary(ev);
-          });
-        }
-      }, 0);
+      // Add click handler directly (no setTimeout)
+      const infoIcon = div.querySelector('.info-icon');
+      if (infoIcon) {
+        infoIcon.addEventListener('click', (e) => {
+          e.stopPropagation();
+          showEventSummary(ev);
+        });
+      }
 
       row.appendChild(div);
     });
