@@ -44,9 +44,54 @@ def add_event():
     save_events(events)
     return jsonify({"message": "Event added", "event": data}), 201
 
+@app.route('/events/telegram', methods=['POST'])
+def add_event_telegram():
+    """
+    Simplified endpoint for n8n/Telegram integration.
+    Accepts simple text format and parses it.
+
+    Expected format: "Year | Title | Category | Region"
+    Example: "1945 | Ende 2. Weltkrieg | Politik | Deutschland"
+    """
+    data = request.get_json()
+
+    # Handle both direct text and n8n message format
+    message = data.get('message') or data.get('text') or data.get('Body', '')
+
+    if not message:
+        return jsonify({"error": "No message provided"}), 400
+
+    # Parse the message
+    from whatsapp_bot import parse_event_message
+    event = parse_event_message(message)
+
+    if not event:
+        return jsonify({
+            "error": "Could not parse message",
+            "message": message,
+            "format": "Expected: Year | Title | Category | Region",
+            "example": "1945 | Ende 2. Weltkrieg | Politik | Deutschland"
+        }), 400
+
+    # Add to events
+    events.append(event)
+    save_events(events)
+
+    return jsonify({
+        "success": True,
+        "message": "Event added successfully",
+        "event": event
+    }), 201
+
 @app.route('/')
 def home():
-    return jsonify({"message": "Timeline API v1", "endpoints": ["/events (GET, POST)"]})
+    return jsonify({
+        "message": "Timeline API v1",
+        "endpoints": [
+            "/events (GET, POST)",
+            "/events/telegram (POST) - for n8n/Telegram integration"
+        ]
+    })
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
