@@ -1,19 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git init:*)",
-      "Bash(git branch:*)",
-      "Bash(gh:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(git remote add:*)",
-      "Bash(git push:*)",
-      "Bash(python api.py:*)",
-      "Bash(python -m http.server:*)",
-      "Bash(open http://localhost:8000)",
-      "Bash(Ende 2. Weltkrieg)",
-      "Bash(Politik)",
-      "Bash(Deutschland\"\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
+      "Bash(open index.html)"
     ],
     "deny": [],
     "ask": []

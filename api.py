@@ -1,9 +1,9 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 import json
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='.')
 CORS(app)
 
 EVENTS_FILE = 'events.json'
@@ -85,6 +85,10 @@ def add_event_telegram():
 
 @app.route('/')
 def home():
+    return app.send_static_file('index.html')
+
+@app.route('/api')
+def api_info():
     return jsonify({
         "message": "Timeline API v1",
         "endpoints": [
